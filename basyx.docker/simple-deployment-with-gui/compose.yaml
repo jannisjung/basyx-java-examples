@@ -1,18 +1,18 @@
 services:
   registry:
-    image: eclipsebasyx/aas-registry:1.2.0
+    image: eclipsebasyx/aas-registry:1.3.0
+    container_name: example-registry
     ports:
-        - 8082:4000
+        - 4000:4000
     environment:
         - basyxregistry_registry_backend=InMemory
         - basyxcontext_contextpath=/registry
         - basyxcontext_contextport=4000
-        - basyxcontext_accesscontrolalloworigin=http://localhost:8080
-    container_name: registry
+        - basyxcontext_accesscontrolalloworigin=*
 
   aas:
-    image: eclipsebasyx/aas-server:1.2.0
-    container_name: aas
+    image: eclipsebasyx/aas-server:1.3.0
+    container_name: example-aas
     ports:
         - 4001:4001
     environment:
@@ -22,9 +22,10 @@ services:
         - basyxcontext_contextport=4001
         - basyxaas_aas_source=aasx/01_Festo.aasx
         - waiting_for=[{"host":"registry","port":"4000"}]
+        - basyxcontext_accesscontrolalloworigin=*
 
   gui: 
-    image: eclipsebasyx/aas-gui:v220729
-    container_name: aasGui 
+    image: eclipsebasyx/aas-gui:v230113
+    container_name: example-aasGui 
     ports:
-        - 8080:8080
+        - 3000:3000
